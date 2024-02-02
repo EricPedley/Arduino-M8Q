@@ -19,7 +19,7 @@ class UBXPacketReader {
         void reset();
 
     private:
-        uint8_t payload[100];
+        uint8_t payload[256];
         uint8_t payloadLength;
         uint8_t packetIndex;
         uint8_t messageClass;

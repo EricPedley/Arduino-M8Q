@@ -8,7 +8,12 @@ void setup() {
     Serial.println("SparkFun Ublox Example");
     
     Wire.begin(); // A4 is SDA, A5 is SCL
+
+    // pinMode(A3, OUTPUT);
+    // digitalWrite(A3, HIGH); // trigger GPS module reset
 }
+
+UBXPacketReader packet;
 
 void loop() {
     Serial.println("Requesting data from u-blox");
@@ -36,14 +41,13 @@ void loop() {
 
     Wire.readBytes(len, 2);
     uint16_t dataLen = len[0] << 8 | len[1];
-    uint8_t buffer[4096];
+    uint8_t buffer[1024];
 
     Wire.requestFrom(0x42, dataLen);
     Wire.readBytes(buffer, dataLen);
     Serial.print("Data length: ");
     Serial.println(dataLen);
 
-    UBXPacketReader packet;
     if (buffer[0]==0xB5)
     {
         for(uint16_t i=2; i<dataLen; i++)
@@ -61,26 +65,34 @@ void loop() {
         Serial.print("Message ID: ");
         Serial.println(packet.getMessageId(), HEX);
 
+
+
+        Serial.println("Payload:");
+        Serial.flush();
+        delay(1000);
+
+        uint8_t* payload = packet.getPayload();
+        // uint8_t firstByte = payload[0];
+        // Serial.print(firstByte, HEX);
+        // Serial.print(0x0A, HEX);
+
         // void* payload = packet.getPayload();
-
-        // Serial.println("Payload:");
-        // // char* swVersion = (char*)payload;
-        // // Serial.print("Software version: ");
-        // // Serial.println(swVersion);
-        // // char* hwVersion = (char*)payload + 30;
-        // // Serial.print("Hardware version: ");
-        // // Serial.println(hwVersion);
         // for(int i=0;i<packet.getPayloadLength();i++) {
-        //     Serial.print(*(char*)(payload+i));
+        //     Serial.print(((uint8_t*)payload)[i], HEX);
         // }
-        // Serial.println();
-
+        // // Serial.println();
+        char* swVersion = (char*)payload;
+        Serial.print("Software version: ");
+        Serial.println(swVersion);
+        char* hwVersion = (char*)payload + 30;
+        Serial.print("Hardware version: ");
+        Serial.println(hwVersion);
         packet.reset();
     }
     else
     {
         Serial.println("No ublox packet available");
     }
-    delay(1000);
     Serial.println();
+    delay(1000);
 }
