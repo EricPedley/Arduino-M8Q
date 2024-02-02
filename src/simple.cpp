@@ -12,12 +12,12 @@ void setup() {
 
 void loop() {
     Wire.beginTransmission(0x42);
-    uint8_t messageBuff[7] = {0xb5, 0x62, 0x06, 0x02, 0x01, 0x00, 0x00};
+    uint8_t messageBuff[6] = {0xb5, 0x62, 0x0A, 0x04, 0x00, 0x00};
     uint8_t CK_A{0}, CK_B{0};
 
     Wire.write(messageBuff[0]);
     Wire.write(messageBuff[1]);
-    for(int i=2;i<7;i++) {
+    for(int i=2;i<6;i++) {
         CK_A = CK_A + messageBuff[i];
         CK_B = CK_B + CK_A;
         Wire.write(messageBuff[i]);
@@ -35,7 +35,7 @@ void loop() {
 
     Wire.readBytes(len, 2);
     uint16_t dataLen = len[0] << 8 | len[1];
-    uint8_t buffer[1024];
+    uint8_t buffer[4096];
 
     Wire.requestFrom(0x42, dataLen);
     Wire.readBytes(buffer, dataLen);
@@ -59,6 +59,21 @@ void loop() {
         Serial.println(packet.getMessageClass(), HEX);
         Serial.print("Message ID: ");
         Serial.println(packet.getMessageId(), HEX);
+
+        // void* payload = packet.getPayload();
+
+        // Serial.println("Payload:");
+        // // char* swVersion = (char*)payload;
+        // // Serial.print("Software version: ");
+        // // Serial.println(swVersion);
+        // // char* hwVersion = (char*)payload + 30;
+        // // Serial.print("Hardware version: ");
+        // // Serial.println(hwVersion);
+        // for(int i=0;i<packet.getPayloadLength();i++) {
+        //     Serial.print(*(char*)(payload+i));
+        // }
+        // Serial.println();
+
         packet.reset();
     }
     else
