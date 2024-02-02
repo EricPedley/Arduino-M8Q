@@ -12,8 +12,18 @@ void setup() {
 
 void loop() {
     Wire.beginTransmission(0x42);
-    uint8_t messageBuff[9] = {0xb5, 0x62, 0x06, 0x02, 0x01, 0x00, 0x00, 0x09, 0x29};
-    Wire.write(messageBuff, 9);
+    uint8_t messageBuff[7] = {0xb5, 0x62, 0x06, 0x02, 0x01, 0x00, 0x00};
+    uint8_t CK_A{0}, CK_B{0};
+
+    Wire.write(messageBuff[0]);
+    Wire.write(messageBuff[1]);
+    for(int i=2;i<7;i++) {
+        CK_A = CK_A + messageBuff[i];
+        CK_B = CK_B + CK_A;
+        Wire.write(messageBuff[i]);
+    }
+    Wire.write(CK_A);
+    Wire.write(CK_B);
     uint8_t len[2];
     Wire.endTransmission(true);
 
@@ -35,7 +45,7 @@ void loop() {
     UBXPacketReader packet;
     if (buffer[0]==0xB5)
     {
-        for(int i=2; i<dataLen; i++)
+        for(uint16_t i=2; i<dataLen; i++)
         {
             packet.update(buffer[i]);
             if(packet.isComplete())
