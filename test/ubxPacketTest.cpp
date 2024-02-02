@@ -15,7 +15,7 @@ void test_short_message_completes() {
     TEST_ASSERT_EQUAL(0x06, packet.getMessageClass());
     TEST_ASSERT_EQUAL(0x02, packet.getMessageId());
 
-    TEST_ASSERT_EQUAL(0x00, packet.getPayload()[0]);
+    TEST_ASSERT_EQUAL(0x00, *(uint8_t*)packet.getPayload());
 
     packet.reset();
     TEST_ASSERT_FALSE(packet.isComplete());

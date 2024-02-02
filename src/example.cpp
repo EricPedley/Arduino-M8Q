@@ -24,7 +24,9 @@
 
 // void loop()
 // {
-//     myGPS.getProtocolVersion();
+//     uint8_t fixType = myGPS.getFixType();
+//     Serial.print("Fix: ");
+//     Serial.println(fixType);
 //     // myGPS.checkUblox(); //See if new data is available. Process bytes as they come in.
 
 //     delay(1000); //Don't pound too hard on the I2C bus

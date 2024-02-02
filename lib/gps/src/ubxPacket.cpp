@@ -45,8 +45,8 @@ UBXPacketUpdateResult UBXPacketReader::update(uint8_t newByte) {
     return UBXPacketUpdateResult::UPDATE_OK;
 }
 
-uint8_t* UBXPacketReader::getPayload() {
-    return payload;
+void* UBXPacketReader::getPayload() {
+    return (void*)payload;
 }
 
 uint8_t UBXPacketReader::getPayloadLength() {

@@ -12,7 +12,7 @@ class UBXPacketReader {
         UBXPacketReader();
         UBXPacketUpdateResult update(uint8_t byte);
         bool isComplete();
-        uint8_t* getPayload();
+        void* getPayload();
         uint8_t getPayloadLength();
         uint8_t getMessageClass();
         uint8_t getMessageId();
