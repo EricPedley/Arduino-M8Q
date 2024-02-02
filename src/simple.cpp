@@ -7,10 +7,11 @@ void setup() {
     Serial.begin(9600);
     Serial.println("SparkFun Ublox Example");
     
-    Wire.begin();
+    Wire.begin(); // A4 is SDA, A5 is SCL
 }
 
 void loop() {
+    Serial.println("Requesting data from u-blox");
     Wire.beginTransmission(0x42);
     uint8_t messageBuff[6] = {0xb5, 0x62, 0x0A, 0x04, 0x00, 0x00};
     uint8_t CK_A{0}, CK_B{0};
